@@ -1,0 +1,18 @@
+{
+  "name": "geojson-editor",
+  "version": "0.0.1",
+  "description": "Leaflet app to enable GeoJSON editing and saving to a file",
+  "main": "index.js",
+  "scripts": {
+    "compile": "node _scripts/compile.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uol-librar/geojson-editor.git"
+  },
+  "author": "Peter Edwards <p.l.edwards@leeds.ac.uk>",
+  "license": "UNLICENSE",
+  "devDependencies": {
+    "sass": "^1.97.3"
+  }
+}

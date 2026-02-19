@@ -1,0 +1,18 @@
+:where(body) {
+    --background-color: #fff;
+    --text-color: #222;
+    --link-colour: #15570c;
+    --hover-colour: #1c7e10;
+}
+@media (prefers-color-scheme: dark) {
+    :where(body) {
+        --background-color: #222;
+        --text-color: #fff;
+        --link-colour: #a3ff91;
+    }
+}
+:where(body.dark) {
+    --background-color: #222;
+    --text-color: #fff;
+    --link-colour: #a3ff91;
+}
