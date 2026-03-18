@@ -39,11 +39,7 @@ function initMap() {
         attribution: '&copy; CNES, Distribution Airbus DS, © Airbus DS, © PlanetObserver (Contains Copernicus Data) | &copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         ext: 'jpg'
     });
-    mapObj.survey = L.tileLayer( 'https://allmaps.xyz/images/a51b7d4cdaadee59/{z}/{x}/{y}@2x.png', {
-        maxZoom: 19,
-	    attribution: 'Tiles served by <a target="external" href="https://allmaps.org">Allmaps</a>'
-    });
-    
+
     // add fullscreen control
     mapObj.map.addControl( new L.Control.Fullscreen( { position: 'topright' } ) );
     
@@ -54,15 +50,6 @@ function initMap() {
         snappable: false,
         layerGroup: mapObj.editorLayerGroup
     });
-    mapObj.map.locate({setView: false, maxZoom: 16});
-    function onLocationFound(e) {
-        var radius = e.accuracy;
-        L.marker(e.latlng).addTo(mapObj.map)
-            .bindPopup("You are within " + radius + " meters from this point").openPopup();
-
-        L.circle(e.latlng, radius).addTo(mapObj.map);
-    }
-    mapObj.map.on('locationfound', onLocationFound);
 
 	/* add the export control */
     L.Control.ExportControl = L.Control.extend({
@@ -104,7 +91,7 @@ function initMap() {
         let title = document.getElementById('ge-dialog-title');
         title.textContent = "Export GeoJSON";
         let content = document.getElementById('ge-dialog-content');
-        content.textContent = JSON.stringify(mapObj.map.pm.getGeomanLayers(true).toGeoJSON(), null, 4);
+        content.innerHTML = '<pre>' + JSON.stringify(mapObj.map.pm.getGeomanLayers(true).toGeoJSON(), null, 4) + '</pre>';
         dialog.show();
     });
     L.DomEvent.on( L.DomUtil.get('savebutton'), 'click', function() {
@@ -115,11 +102,11 @@ function initMap() {
         dialog.show();
     });
     L.DomEvent.on( L.DomUtil.get('locatebutton'), 'click', function() {
-        console.log('click');
         mapObj.map.locate({setView: true, maxZoom: 16});
+        mapObj.map.on('locationfound', onLocationFound);
+        mapObj.map.on('locationerror', onLocationError);
+        L.DomUtil.get('locatebutton').setAttribute('disabled', true);
     });
-    mapObj.map.on('locationfound', onLocationFound);
-    mapObj.map.on('locationerror', onLocationError);
 
     // add layers control
     baseMaps = {
@@ -129,7 +116,6 @@ function initMap() {
         "Stadia Alidade Satellite": mapObj.Stadia_AlidadeSatellite
     };
     overlayMaps = {
-        "Survey": mapObj.survey,
         "Editor layer": mapObj.editorLayerGroup
     };
     var layerControl = L.control.layers(baseMaps, overlayMaps, {collapsed:false}).addTo(mapObj.map);

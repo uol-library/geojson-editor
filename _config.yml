@@ -2,9 +2,10 @@ title: GeoJSON Editor
 email: p.l.edwards@leeds.ac.uk
 description: >- # this means to ignore newlines until "baseurl:"
   Leaflet app to enable GeoJSON editing and saving to a file. 
-baseurl: "geojson-editor" # the subpath of your site, e.g. /blog
 url: "https://uol-library.github.io" # the base hostname & protocol for your site, e.g. http://example.com
-
+baseurl: "/geojson-editor"
+host: "localhost"
+port: 4001
 plugins:
   - jekyll-feed
 
@@ -15,7 +16,5 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - node_modules/
-  - vendor/bundle/
-  - vendor/cache/
-  - vendor/gems/
-  - vendor/ruby/
+  - .vendor/
+  - .bundle/
