@@ -1,4 +1,30 @@
 /**
+ * Normalises latitude/longitude objects so they only extend to 6 decimal places.
+ * @param {Object} latlng - The latitude/longitude object to normalise
+ * @returns {Object} - The normalised latitude/longitude object
+ */
+function normaliseLatLng( latlng ) {
+    return {
+        lat: parseFloat( latlng.lat.toFixed( 6 ) ),
+        lng: parseFloat( latlng.lng.toFixed( 6 ) )
+    };
+}
+
+/**
+ * Create a DOM element with a class name and optionally append it to a parent.
+ * @param {string} tag - The element tag name.
+ * @param {string} [className] - Space-separated class names.
+ * @param {HTMLElement} [parent] - Optional parent to append the element to.
+ * @returns {HTMLElement}
+ */
+export function createElement(tag, className, parent) {
+    const el = document.createElement(tag);
+    if (className) el.className = className;
+    parent?.append(el);
+    return el;
+}
+
+/**
  * Checks to see if localStorage is available
  * 
  * @param {string} type (localStorage or sessionStorage)
@@ -104,3 +130,4 @@ function getJSON( options ) {
         oReq.send();
     }
 }
+

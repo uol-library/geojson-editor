@@ -1,0 +1,20 @@
+        <header class="top-bar">
+            <div class="top-bar-container">
+                <h1 class="site-title"><a href="{{ site.url }}{{ site.baseurl }}/"><span class="site-title-text">{{ site.title }}</span></a></h1>
+                <nav>
+                    <input type="checkbox" id="button">
+                    <label for="button" onclick>Menu</label>
+                    <ul>
+                        <li{% if page.section == 'home' %} class="active"{% endif %}>
+                            <a href="{{ site.url }}{{ site.baseurl }}/">Home</a>
+                        </li>
+                        <li{% if page.section == 'geoman' %} class="active"{% endif %}>
+                            <a href="{{ site.url }}{{ site.baseurl }}/geoman/">Geoman</a>
+                        </li>
+                        <li{% if page.section == 'tracker' %} class="active"{% endif %}>
+                            <a href="{{ site.url }}{{ site.baseurl }}/tracker/">Tracker</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </header>

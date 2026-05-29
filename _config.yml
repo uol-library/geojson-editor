@@ -1,7 +1,7 @@
 title: GeoJSON Editor
 email: p.l.edwards@leeds.ac.uk
 description: >- # this means to ignore newlines until "baseurl:"
-  Leaflet app to enable GeoJSON editing and saving to a file. 
+  Leaflet app to enable GeoJSON editing and saving to local storage. 
 url: "https://uol-library.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 baseurl: "/geojson-editor"
 host: "localhost"

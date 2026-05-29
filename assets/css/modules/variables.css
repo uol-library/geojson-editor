@@ -3,6 +3,12 @@
     --text-color: #222;
     --link-colour: #15570c;
     --hover-colour: #1c7e10;
+    --max-content-width: 60rem;
+    --top-bar-bg-colour: #333;
+    --top-bar-border: #1a1a1a;
+    --top-bar-text-colour: #fff;
+    --footer-bg-colour: #333;
+    --footer-text-colour: #fff;
 }
 @media (prefers-color-scheme: dark) {
     :where(body) {

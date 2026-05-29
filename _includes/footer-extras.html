@@ -1,0 +1,10 @@
+        {% if page.libs contains 'geoman' %}
+            <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+            <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.js"></script>
+            <script src="{{ site.url }}{{ site.baseurl }}/assets/js/geoman.js"></script>
+        {% elsif page.libs contains 'tracker' %}
+            <script type="module" src="{{ site.url }}{{ site.baseurl }}/assets/js/tracker.js"></script>
+        {% else %}
+            <script type="module" src="{{ site.url }}{{ site.baseurl }}/assets/js/main.js"></script>
+        {% endif %} 
+
