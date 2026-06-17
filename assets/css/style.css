@@ -4,4 +4,5 @@
 @import 'modules/layout.css';
 @import 'modules/content.css';
 
+@import 'components/storage.css';
 @import 'components/dialog.css';

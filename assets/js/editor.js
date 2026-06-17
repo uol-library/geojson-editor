@@ -1,7 +1,8 @@
-import { initMap } from './modules/utilities.mjs';
+import { initEditor } from './modules/editor.mjs';
 /**
  * Initialise the map
  */
 document.addEventListener( 'DOMContentLoaded', () => {
-    initMap();
+    initEditor();
 });
+

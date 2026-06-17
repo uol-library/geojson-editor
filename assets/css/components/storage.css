@@ -1,0 +1,60 @@
+.storage-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    background-color: var(--control-bg-colour);
+    color: var(--control-text-colour);
+    padding: 0.5rem;
+    button {
+        cursor: pointer;
+        border: none;
+        padding: 0.5rem;
+        background-color: var(--control-button-bg-colour);
+        color: var(--control-button-text-colour);
+        &:hover {
+            background-color: var(--control-button-hover-colour);
+        }
+    }
+}
+.saved-data-list {
+    padding: 0;
+    margin: 0;
+    li {
+        display: flex;
+        justify-content: space-between;
+        gap: .5rem;
+        align-items: center;
+        padding: 0.25rem 0;
+        border-top: 1px dotted var(--control-border-colour);
+        button {
+            cursor: pointer;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            background-color: var(--control-button-bg-colour);
+            color: var(--control-button-text-colour);
+            &:hover {
+                background-color: var(--control-button-hover-colour);
+            }
+            &.delete-data-button {
+                background-color: var(--control-deletebutton-bg-colour);
+                color: var(--control-deletebutton-text-colour);
+                &:hover {
+                    background-color: var(--control-deletebutton-hover-colour);
+                }
+            }
+        }
+        span.saved-data-label {
+            flex: 1;
+            margin-left: 0.5rem;
+        }
+    }
+}
+
+.copy__button {
+    display: inline-block;
+    padding: 0.5rem;
+    background-color: #fff;
+    color: #000;
+    border: none;
+    cursor: pointer;
+}

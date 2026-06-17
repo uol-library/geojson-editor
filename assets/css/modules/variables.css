@@ -3,6 +3,18 @@
     --text-color: #222;
     --link-colour: #15570c;
     --hover-colour: #1c7e10;
+    --control-bg-colour: #fff;
+    --control-text-colour: #222;
+    --control-border-colour: #15570c;
+    --control-button-bg-colour: #15570c;
+    --control-button-text-colour: #fff;
+    --control-button-hover-colour: #1c7e10;
+    --control-copybutton-bg-colour: #3835dc;
+    --control-copybutton-text-colour: #fff;
+    --control-copybutton-hover-colour: #3562dc;
+    --control-deletebutton-bg-colour: #dc3545;
+    --control-deletebutton-text-colour: #fff;
+    --control-deletebutton-hover-colour: #c82333;
     --max-content-width: 60rem;
     --top-bar-bg-colour: #333;
     --top-bar-border: #1a1a1a;

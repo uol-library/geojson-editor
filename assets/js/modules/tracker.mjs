@@ -1,86 +1,69 @@
 import { 
-    Control,
-    Map,
-    TileLayer
+    CircleMarker,
+    Polyline
 } from 'leaflet';
-import { LocateControl } from 'locatecontrol';
-import { FullScreen } from 'fullscreencontrol';
-import { ThemeControl } from "themecontrol";
 import { StorageControl } from './storage.mjs';
+import { normaliseLatLng } from './utilities.mjs';
 import { mapObj } from './config.mjs';
 
-
 /**
- * Initialise map and set listeners to set up markers when loaded
+ * Initialise tracker functionality - set up storage control, journey line and markers,
+ * and listeners for location updates
  */
-export function initMap() {
-    if ( document.getElementById( 'map' ) === null ) {
-        return;
-    }
-    mapObj.map = new Map('map', {
-        zoom: mapObj.startZoom,
-        center: [ mapObj.startLoc.lat, mapObj.startLoc.lng ],
-        minZoom: mapObj.minZoom,
-        maxZoom: mapObj.maxZoom
-    });
-    /* change leaflet attribution */
-    mapObj.map.attributionControl.setPrefix( '<a href="https://leafletjs.com" target="external" title="A JavaScript library for interactive maps" aria-label="Leaflet - a JavaScript library for interactive maps"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="12" height="8"><path fill="#4C7BE1" d="M0 0h12v4H0z"></path><path fill="#FFD500" d="M0 4h12v3H0z"></path><path fill="#E0BC00" d="M0 7h12v1H0z"></path></svg> Leaflet</a>' );
-    mapObj.osm = new TileLayer( 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: mapObj.maxZoom,
-        attribution: '© <a target="external" href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo( mapObj.map );
-    mapObj.OpenCycleMap = new TileLayer('https://api.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=953b59eb91064cc1a54bc7fe78939685', {
-        maxZoom: mapObj.maxZoom,
-        attribution: 'Maps: &copy; <a href="https://www.thunderforest.com/">Thunmderforest</a>, Data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
-    });
-    mapObj.Esri_WorldImagery = new TileLayer( 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        maxZoom: mapObj.maxZoom,
-        attribution: 'Tiles © Esri - Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-    });
-    let baseMaps = {
-        "OpenStreetMap": mapObj.osm,
-        "OpenCycleMap": mapObj.OpenCycleMap,
-        "Esri WorldImagery": mapObj.Esri_WorldImagery
-    };
-    let overlayMaps = {};
-    mapObj.layerControl = new Control.Layers(baseMaps, overlayMaps, { position: 'bottomleft' }).addTo(mapObj.map);
-    mapObj.fullscreencontrol = new FullScreen({
-        position: 'topleft'
-    }).addTo(mapObj.map);
+export function initTracker() {
+    console.log("Initialising tracker...");
     mapObj.storagecontrol = new StorageControl({
-        position: 'topright'
-    }).addTo(mapObj.map);
-    mapObj.locateControl = new LocateControl({
-        position: 'topleft',
-        strings: {
-            title: "Start tracking my location"
-        },
-        locateOptions: {
-            watch: true,
-            enableHighAccuracy: true
-        }
-    }).addTo(mapObj.map);
-    // Theme control
-    new ThemeControl({
-        position: "topleft",
-        defaultTheme: "light",
-        detectSystemTheme: true,
-        storageKey: "iiif-map-theme",
-
-        // Callback when theme changes
-        onChange: (themeKey, theme) => {
-            console.log(`Theme changed to: ${themeKey}`);
-        }
-    }).addTo(mapObj.map);    
+        position: 'topright',
+        prefix: 'geojson-editor',
+        saveTitle: "Save journey data",
+        exportTitle: "Export journey data",
+        loadTitle: "Load journey data",
+        saveCallback: saveState,
+        loadCallback: loadState
+    });
+    mapObj.storagecontrol.addTo(mapObj.map);
+    mapObj.journeyline = new Polyline([], { color: 'red' }).addTo(mapObj.map);
+    mapObj.journeymarkers = [];
     mapObj.map.on('locationfound', function(e){
         mapObj.user.lat = e.latitude;
         mapObj.user.lng = e.longitude;
+        let nll = normaliseLatLng({lat: e.latitude, lng: e.longitude});
+        if ( mapObj.user.journey.length === 0 || ( mapObj.user.journey[mapObj.user.journey.length - 1].lat !== nll.lat || mapObj.user.journey[mapObj.user.journey.length - 1].lng !== nll.lng ) ) {
+            mapObj.user.journey.push({lat: nll.lat, lng: nll.lng, timestamp: e.timeStamp});
+            let marker = new CircleMarker([nll.lat, nll.lng], { radius: 5, color: 'red' }).addTo(mapObj.map);
+            mapObj.journeymarkers.push(marker);
+            if ( mapObj.user.journey.length > 1 ) {
+                let waypoints = [];
+                mapObj.user.journey.forEach(p => {
+                    waypoints.push({ lat: p.lat, lng: p.lng});
+                });
+                mapObj.journeyline.setLatLngs(waypoints);
+            }
+        }
         console.log(mapObj.user);
     });
     mapObj.map.on('locateactivate', e => { mapObj.locationactive = true });
     mapObj.map.on('locatedeactivate', e => { mapObj.locationactive = false; mapObj.user.lat = null; mapObj.user.lng = null });
     mapObj.map.on( 'click', e => { console.log( e.latlng ); });
-    mapObj.mapLoaded = true;
+}
 
-    document.dispatchEvent( new Event( 'maploaded' ) );
+function saveState() {
+    console.log("Saving journey data...");
+    return { success: true, data: JSON.stringify(mapObj.user.journey), msg: 'Saved journey data' };
+}
+
+function loadState(data) {
+    console.log("Loading journey data...");
+    /* data is parsed JSOn contianing an array of objects with lat, lng and timestamp properties */
+    let waypoints = [];
+    data.forEach(p => {
+        if ( p.lat && p.lng && p.timestamp ) {
+            waypoints.push({ lat: p.lat, lng: p.lng});
+        }
+        new CircleMarker([p.lat, p.lng], { radius: 5, color: 'blue' }).addTo(mapObj.map);
+    });
+    if ( waypoints.length > 1 ) {
+        new Polyline(waypoints, { color: 'blue' }).addTo(mapObj.map);
+    }
+    return { success: true, data: JSON.stringify(data), msg: 'Loaded journey data' };
 }

@@ -64,8 +64,8 @@
 
     animation: fade-in 400ms 200ms both, slide-up 400ms 200ms both;
     padding: 1em;
-    max-width: 90%;
-    width: 600px;
+    max-width: 900px;
+    width: 90%;
     border-radius: 5px;
 }
 
