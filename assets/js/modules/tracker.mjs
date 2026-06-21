@@ -24,6 +24,7 @@ export function initTracker() {
     mapObj.storagecontrol.addTo(mapObj.map);
     mapObj.journeyline = new Polyline([], { color: 'red' }).addTo(mapObj.map);
     mapObj.journeymarkers = [];
+    mapObj.user.journey = [];
     mapObj.map.on('locationfound', function(e){
         mapObj.user.lat = e.latitude;
         mapObj.user.lng = e.longitude;
