@@ -78,7 +78,7 @@ export function initMap() {
     mapObj.themeControl = new ThemeControl({
         position: "topleft",
         defaultTheme: "light",
-        detectSystemTheme: true,
+        detectSystemTheme: false,
         storageKey: "iiif-map-theme",
 
         // Callback when theme changes
