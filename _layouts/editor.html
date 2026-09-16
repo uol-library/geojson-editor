@@ -8,6 +8,13 @@ layout: compress
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</title>
         {% if page.description %}<meta name="description" content="{{ page.description | strip_html | escape }}"/>{% elsif site.description %}<meta name="description" content="{{ site.description | strip_html | escape }}"/>{% endif %}
+        <script type="importmap">
+        {
+            "imports": {
+                "a11y-dialog": "https://cdn.jsdelivr.net/npm/a11y-dialog@8/dist/a11y-dialog.esm.min.js"
+            }
+        }
+        </script>
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
         <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css">
         <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">

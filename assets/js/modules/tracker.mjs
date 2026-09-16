@@ -28,10 +28,10 @@ export function initTracker() {
     mapObj.map.on('locationfound', function(e){
         mapObj.user.lat = e.latitude;
         mapObj.user.lng = e.longitude;
-        let nll = normaliseLatLng({lat: e.latitude, lng: e.longitude});
-        if ( mapObj.user.journey.length === 0 || ( mapObj.user.journey[mapObj.user.journey.length - 1].lat !== nll.lat || mapObj.user.journey[mapObj.user.journey.length - 1].lng !== nll.lng ) ) {
+        let nll = normaliseLatLng({lat: e.latitude, lng: e.longitude}, 5 );
+        if ( mapObj.user.journey.length === 0 || ( parseFloat( mapObj.user.journey[mapObj.user.journey.length - 1].lat ) !== parseFloat( nll.lat ) && parseFloat( mapObj.user.journey[mapObj.user.journey.length - 1].lng ) !== parseFloat( nll.lng ) ) ) {
             mapObj.user.journey.push({lat: nll.lat, lng: nll.lng, timestamp: e.timeStamp});
-            let marker = new CircleMarker([nll.lat, nll.lng], { radius: 5, color: 'red' }).addTo(mapObj.map);
+            let marker = new CircleMarker([nll.lat, nll.lng], { radius: 4, color: 'red', fill: true }).addTo(mapObj.map);
             mapObj.journeymarkers.push(marker);
             if ( mapObj.user.journey.length > 1 ) {
                 let waypoints = [];
@@ -55,13 +55,13 @@ function saveState() {
 
 function loadState(data) {
     console.log("Loading journey data...");
-    /* data is parsed JSOn contianing an array of objects with lat, lng and timestamp properties */
+    /* data is parsed JSON contianing an array of objects with lat, lng and timestamp properties */
     let waypoints = [];
     data.forEach(p => {
         if ( p.lat && p.lng && p.timestamp ) {
             waypoints.push({ lat: p.lat, lng: p.lng});
         }
-        new CircleMarker([p.lat, p.lng], { radius: 5, color: 'blue' }).addTo(mapObj.map);
+        new CircleMarker([p.lat, p.lng], { radius: 4, color: 'blue', fill: true }).addTo(mapObj.map);
     });
     if ( waypoints.length > 1 ) {
         new Polyline(waypoints, { color: 'blue' }).addTo(mapObj.map);

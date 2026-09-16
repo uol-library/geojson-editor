@@ -11,12 +11,13 @@ import { mapObj } from './config.mjs';
 /**
  * Normalises latitude/longitude objects so they only extend to 6 decimal places.
  * @param {Object} latlng - The latitude/longitude object to normalise
+ * @param {Integer} - number of decimal places to resolve to
  * @returns {Object} - The normalised latitude/longitude object
  */
-export function normaliseLatLng( latlng ) {
+export function normaliseLatLng( latlng, places = 6 ) {
     return {
-        lat: parseFloat( latlng.lat.toFixed( 6 ) ),
-        lng: parseFloat( latlng.lng.toFixed( 6 ) )
+        lat: parseFloat( latlng.lat.toFixed( places ) ),
+        lng: parseFloat( latlng.lng.toFixed( places ) )
     };
 }
 
